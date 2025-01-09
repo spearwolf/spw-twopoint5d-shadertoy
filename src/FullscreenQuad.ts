@@ -1,16 +1,19 @@
-import { FrontSide, Mesh, MeshBasicMaterial, PlaneGeometry } from "three";
+import { type Material, Mesh, PlaneGeometry } from "three/webgpu";
 
 export class FullscreenQuad {
-    readonly geometry: PlaneGeometry;
-    readonly material: MeshBasicMaterial;
-    readonly mesh: Mesh;
+  readonly geometry: PlaneGeometry;
+  readonly mesh: Mesh;
 
-    constructor() {
-        this.geometry = new PlaneGeometry(2, 2);
-        this.material = new MeshBasicMaterial({
-            color: 0xff0066,
-            side: FrontSide,
-        });
-        this.mesh = new Mesh(this.geometry, this.material);
-    }
+  set material(value: Material) {
+    this.mesh.material = value;
+  }
+
+  get material(): Material {
+    return this.mesh.material as Material;
+  }
+
+  constructor() {
+    this.geometry = new PlaneGeometry(2, 2);
+    this.mesh = new Mesh(this.geometry);
+  }
 }

@@ -15,7 +15,7 @@
     "dependencies": {
         "@spearwolf/eventize": "^4.0.1",
         "@spearwolf/signalize": "^0.18.1",
-        "@spearwolf/twopoint5d": "^0.6.0",
+        "@spearwolf/twopoint5d": "^0.7.0",
         "@types/three": "^0.172.0",
         "three": "^0.172.0"
     }
