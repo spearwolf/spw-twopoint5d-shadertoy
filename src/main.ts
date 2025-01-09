@@ -8,7 +8,7 @@ const app = new App(document.getElementById("demo")!);
 
 app.start(({ display }) => {
   const quad = new FullscreenQuad();
-  const shader = new CustomShader();
+  const shader = new CustomShader(display);
 
   quad.material = shader.material;
   app.scene.add(quad.mesh);
