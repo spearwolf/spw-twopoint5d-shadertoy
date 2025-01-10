@@ -85,7 +85,7 @@ export class CustomShader extends ShadertoyRuntime {
     const LOOP = 4;
 
     for (let i = 0; i < LOOP; i++) {
-      uv = fract(uv.mul(1.5)).sub(0.5);
+      uv = fract(uv.mul(1.7)).sub(0.5);
 
       const d = length(uv).mul(exp(length(uv0).mul(-1)));
 
