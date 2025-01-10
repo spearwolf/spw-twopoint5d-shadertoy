@@ -11,6 +11,7 @@ import {
   fract,
   uv as geometryUV,
   length,
+  pow,
   ShaderNodeObject,
   sin,
   uniform,
@@ -51,13 +52,11 @@ export class CustomShader extends ShadertoyRuntime {
       this.pixelSize.value.set(width, height);
     });
 
-    //
+    // http://dev.thi.ng/gradients/
 
     this.palette = Fn(([t = this.iTime]) => {
-      // http://dev.thi.ng/gradients/
-
       const coefficients = [
-        [0.558, 0.5, 0.5],
+        [0.658, 0.5, 0.5],
         [0.228, 0.5, 0.5],
         [1.0, 1.0, 1.0],
         [0.0, 0.333, 0.667],
@@ -73,11 +72,11 @@ export class CustomShader extends ShadertoyRuntime {
       return a.add(b.mul(cos(c.mul(t).add(d).mul(x))));
     });
 
-    //
+    // https://www.youtube.com/watch?v=f4s1h2YETNY
 
     let finalColor = vec3(0, 0, 0);
 
-    const frag = geometryUV().mul(2).sub(1);
+    const frag = geometryUV().mul(3).sub(1.5);
     let uv = vec2(this.aspectRatio.mul(frag.x), frag.y);
     const uv0 = vec2(uv);
 
@@ -95,11 +94,11 @@ export class CustomShader extends ShadertoyRuntime {
       const d = length(uv).mul(exp(length(uv0).mul(-1)));
 
       const col = this.palette(
-        length(uv0).add(this.iTime.mul(0.4)).add(float(i).mul(0.3))
+        length(uv0).add(this.iTime.mul(0.05)).add(float(i).mul(0.3))
       );
 
-      const d1 = abs(sin(d.mul(8).add(this.iTime)).div(8));
-      const d2 = float(0.02).div(d1);
+      const d1 = abs(sin(d.mul(9).add(this.iTime.mul(0.575))).div(8));
+      const d2 = pow(float(0.015).div(d1), 2.0);
 
       finalColor = finalColor.add(col.mul(d2).div(LOOP));
     }
