@@ -72,7 +72,7 @@ export class CustomShader extends ShadertoyRuntime {
 
     let finalColor = vec3(0, 0, 0);
 
-    const frag = geometryUV().mul(3).sub(1.5);
+    const frag = geometryUV().sub(0.5);
     let uv = vec2(this.aspectRatio.mul(frag.x), frag.y);
     const uv0 = vec2(uv);
 
@@ -82,7 +82,7 @@ export class CustomShader extends ShadertoyRuntime {
     //    |      |      |
     // [1,-1]-------[-1,-1]
 
-    const LOOP = 3;
+    const LOOP = 4;
 
     for (let i = 0; i < LOOP; i++) {
       uv = fract(uv.mul(1.5)).sub(0.5);
