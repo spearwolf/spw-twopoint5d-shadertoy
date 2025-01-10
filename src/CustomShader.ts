@@ -12,6 +12,7 @@ import {
   uv as geometryUV,
   length,
   pow,
+  screenUV,
   ShaderNodeObject,
   sin,
   uniform,
@@ -98,6 +99,8 @@ export class CustomShader extends ShadertoyRuntime {
       finalColor = finalColor.add(col.mul(d2).div(LOOP));
     }
 
-    this.material.colorNode = color(vec4(finalColor, 1));
+    const finalColor_ = finalColor.mul(length(screenUV.xzy));
+
+    this.material.colorNode = color(vec4(finalColor_, 1));
   }
 }

@@ -3,26 +3,27 @@ import "./style.css";
 import { on } from "@spearwolf/eventize";
 import { App } from "./App";
 import { CustomShader } from "./CustomShader";
-import { FullscreenQuad } from "./FullscreenQuad";
+import { FullscreenCube } from "./FullscreenCube.ts";
 
 const app = new App(document.getElementById("demo")!);
 
 app.start(({ display }) => {
-  const quad = new FullscreenQuad();
+  // const quad = new FullscreenQuad();
+  const cube = new FullscreenCube();
 
   on(display, "resize", ({ width, height }) => {
     const aspect = width / height;
     if (aspect < 1) {
-      quad.mesh.scale.set(1, height / width, 1);
+      cube.mesh.scale.set(1, height / width, 1);
     } else {
-      quad.mesh.scale.set(aspect, 1, 1);
+      cube.mesh.scale.set(aspect, 1, 1);
     }
   });
 
   const shader = new CustomShader(display);
 
-  quad.material = shader.material;
-  app.scene.add(quad.mesh);
+  cube.material = shader.material;
+  app.scene.add(cube.mesh);
 
-  Object.assign(window, { display, quad, shader }); // just for debugging
+  Object.assign(window, { display, cube, shader }); // just for debugging
 });
