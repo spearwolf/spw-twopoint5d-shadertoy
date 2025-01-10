@@ -5,14 +5,15 @@ import {
   abs,
   color,
   cos,
+  exp,
   float,
   Fn,
   fract,
+  uv as geometryUV,
   length,
   ShaderNodeObject,
   sin,
   uniform,
-  uv,
   vec2,
   vec3,
   vec4,
@@ -56,26 +57,29 @@ export class CustomShader extends ShadertoyRuntime {
       // http://dev.thi.ng/gradients/
 
       const coefficients = [
-        [0.658, 0.5, 0.5],
+        [0.558, 0.5, 0.5],
         [0.228, 0.5, 0.5],
         [1.0, 1.0, 1.0],
         [0.0, 0.333, 0.667],
       ];
-
-      const x = 6.28318 / 2;
 
       const a = vec3(...coefficients[0]);
       const b = vec3(...coefficients[1]);
       const c = vec3(...coefficients[2]);
       const d = vec3(...coefficients[3]);
 
+      const x = 6.28318 * 0.5;
+
       return a.add(b.mul(cos(c.mul(t).add(d).mul(x))));
     });
 
     //
 
-    const _uv = uv().mul(2).sub(1);
-    const fragCoord = vec2(this.aspectRatio.mul(_uv.x), _uv.y);
+    let finalColor = vec3(0, 0, 0);
+
+    const frag = geometryUV().mul(2).sub(1);
+    let uv = vec2(this.aspectRatio.mul(frag.x), frag.y);
+    const uv0 = vec2(uv);
 
     //  [-1,1]-------[1,1]
     //    |      |      |
@@ -83,16 +87,23 @@ export class CustomShader extends ShadertoyRuntime {
     //    |      |      |
     // [1,-1]-------[-1,-1]
 
-    const coords = fract(fragCoord.mul(2)).sub(0.5);
+    const LOOP = 3;
 
-    const d = length(coords);
+    for (let i = 0; i < LOOP; i++) {
+      uv = fract(uv.mul(1.5)).sub(0.5);
 
-    const col = this.palette(length(fragCoord).add(this.iTime.div(3)));
+      const d = length(uv).mul(exp(length(uv0).mul(-1)));
 
-    const e = abs(sin(d.mul(8).add(this.iTime)).div(8));
+      const col = this.palette(
+        length(uv0).add(this.iTime.mul(0.4)).add(float(i).mul(0.3))
+      );
 
-    const x = float(0.007).div(e);
+      const d1 = abs(sin(d.mul(8).add(this.iTime)).div(8));
+      const d2 = float(0.02).div(d1);
 
-    this.material.colorNode = color(vec4(col.mul(x), 1));
+      finalColor = finalColor.add(col.mul(d2).div(LOOP));
+    }
+
+    this.material.colorNode = color(vec4(finalColor, 1));
   }
 }
