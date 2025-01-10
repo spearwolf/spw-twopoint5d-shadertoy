@@ -19,12 +19,7 @@ import {
   vec3,
   vec4,
 } from "three/tsl";
-import {
-  DoubleSide,
-  MeshBasicNodeMaterial,
-  UniformNode,
-  Vector2,
-} from "three/webgpu";
+import { DoubleSide, MeshBasicNodeMaterial, UniformNode } from "three/webgpu";
 import { ShadertoyRuntime } from "./ShadertoyRuntime";
 
 // https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language
@@ -36,7 +31,7 @@ export class CustomShader extends ShadertoyRuntime {
   });
 
   readonly aspectRatio: ShaderNodeObject<UniformNode<number>>;
-  readonly pixelSize: ShaderNodeObject<UniformNode<Vector2>>;
+  // readonly pixelSize: ShaderNodeObject<UniformNode<Vector2>>;
   readonly palette: ShaderNodeFn<[any]>;
 
   constructor(display: Display) {
@@ -44,12 +39,12 @@ export class CustomShader extends ShadertoyRuntime {
 
     // uniforms
 
-    this.pixelSize = uniform(new Vector2(display.width, display.height));
+    // this.pixelSize = uniform(new Vector2(display.width, display.height));
     this.aspectRatio = uniform(display.width / display.height);
 
     on(display, "resize", ({ width, height }) => {
       this.aspectRatio.value = width / height;
-      this.pixelSize.value.set(width, height);
+      // this.pixelSize.value.set(width, height);
     });
 
     // http://dev.thi.ng/gradients/
